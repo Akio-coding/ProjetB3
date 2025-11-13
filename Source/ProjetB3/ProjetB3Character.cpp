@@ -10,6 +10,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "QuestComponent.h" 
+#include "Blueprint/UserWidget.h" 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -52,12 +54,45 @@ AProjetB3Character::AProjetB3Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
+
+	QuestComponent = CreateDefaultSubobject<UQuestComponent>(TEXT("QuestComponent"));
 }
 
 void AProjetB3Character::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+
+	if (QuestWidgetClass) 
+	{
+		
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC)
+		{
+			QuestWidgetInstance = CreateWidget<UUserWidget>(PC, QuestWidgetClass);
+			if (QuestWidgetInstance)
+			{
+				QuestWidgetInstance->AddToViewport();
+			}
+		}
+	}
+
+	
+	FQuestObjective Objective;
+	//Objective.Description = FText::FromString("Ennemis tués");
+	Objective.TargetCount = 3;
+	Objective.CurrentCount = 0; 
+
+	
+	FActiveQuest NewQuest;
+	NewQuest.Title = FText::FromString(TEXT("Eliminations"));
+	NewQuest.Objectives.Add(Objective); 
+
+	
+	if (QuestComponent)
+	{
+		QuestComponent->AddQuest(NewQuest);
+	}
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "QuestData.h" 
+#include "Blueprint/UserWidget.h" 
 #include "ProjetB3Character.generated.h"
 
 class USpringArmComponent;
@@ -19,6 +21,7 @@ UCLASS(config=Game)
 class AProjetB3Character : public ACharacter
 {
 	GENERATED_BODY()
+
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -49,7 +52,22 @@ public:
 	
 
 protected:
+	// --- Section Quête ---
 
+	// Le composant de quête
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")
+	class UQuestComponent* QuestComponent;
+
+	// La *classe* de Widget Blueprint que nous voulons créer
+	// Nous la définirons dans l'éditeur
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UUserWidget> QuestWidgetClass;
+
+	// L'instance de widget que nous allons créer
+	UPROPERTY(VisibleInstanceOnly, Category = "UI")
+	class UUserWidget* QuestWidgetInstance;
+
+protected : 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
