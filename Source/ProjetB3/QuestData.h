@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "QuestReward.h"
 #include "QuestData.generated.h"
 
 // Objectif de la quête (ex: "Tuer 3 ennemis")
@@ -12,6 +13,10 @@ struct FQuestObjective
     GENERATED_BODY()
 
 public:
+    // Le "Tag" unique pour cet objectif (ex: "KillEnemy", "CollectWood")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
+    FName ObjectiveTag;
+
     // La description de l'objectif (ex: "Ennemis tués")
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
     FText Description;
@@ -27,6 +32,7 @@ public:
     // Constructeur par défaut
     FQuestObjective()
     {
+        ObjectiveTag = NAME_None;
         Description = FText::GetEmpty();
         TargetCount = 1;
         CurrentCount = 0;
@@ -47,4 +53,19 @@ public:
     // Une quête peut avoir plusieurs objectifs
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
     TArray<FQuestObjective> Objectives;
+
+    // Le tableau des récompenses
+    // 'Instanced' est CRUCIAL. Il dit à Unreal que ce tableau 
+    // possède des instances uniques de UObjects.
+    UPROPERTY(EditAnywhere, Instanced, Category = "Quest")
+    TArray<UQuestReward*> Rewards;
+
+    // Pour savoir si la quête est terminée
+    UPROPERTY(VisibleInstanceOnly, Category = "Quest")
+    bool bIsComplete;
+
+    FActiveQuest()
+    {
+        bIsComplete = false;
+    }
 };

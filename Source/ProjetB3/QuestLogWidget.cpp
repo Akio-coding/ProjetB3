@@ -24,15 +24,15 @@ void UQuestLogWidget::NativeConstruct()
             QuestComponent->OnQuestUpdated.AddDynamic(this, &UQuestLogWidget::HandleQuestUpdated);
 
             // Appelons-le une fois au début pour afficher les quêtes actuelles
-            HandleQuestUpdated(FQuestObjective());
+            HandleQuestUpdated();
         }
     }
 }
 
-void UQuestLogWidget::HandleQuestUpdated(const FQuestObjective& QuestData)
+void UQuestLogWidget::HandleQuestUpdated()
 {
     // Quand le composant émet le signal, cette fonction est appelée.
     // Elle ne fait qu'une chose : appeler l'événement Blueprint
     // pour que l'éditeur puisse s'occuper de l'affichage.
-    OnQuestDataUpdated(QuestData);
+    OnQuestDataUpdated();
 }

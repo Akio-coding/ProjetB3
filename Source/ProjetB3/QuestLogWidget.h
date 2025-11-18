@@ -19,12 +19,12 @@ protected:
 
     // C'est une fonction C++ qui va appeler un événement Blueprint
     UFUNCTION()
-    void HandleQuestUpdated(const FQuestObjective& QuestData);
+    void HandleQuestUpdated();
 
     // C'est l'événement que nous implémenterons dans l'éditeur Blueprint
     // pour mettre à jour le texte à l'écran.
     UFUNCTION(BlueprintImplementableEvent, Category = "Quest")
-    void OnQuestDataUpdated(const FQuestObjective& QuestData);
+    void OnQuestDataUpdated();
 
     // Une référence pratique vers notre composant de quêtes
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")

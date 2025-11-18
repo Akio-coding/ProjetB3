@@ -67,6 +67,10 @@ protected:
 	UPROPERTY(VisibleInstanceOnly, Category = "UI")
 	class UUserWidget* QuestWidgetInstance;
 
+	// Quête rattachée au personnage
+	UPROPERTY(EditDefaultsOnly, Category = "Quest")
+	class UQuestDataAsset* StartingQuestAsset;
+
 protected : 
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
