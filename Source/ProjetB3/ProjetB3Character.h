@@ -14,6 +14,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 struct FInputActionValue;
+class UQuestDataAsset;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
@@ -69,7 +70,7 @@ protected:
 
 	// Quête rattachée au personnage
 	UPROPERTY(EditDefaultsOnly, Category = "Quest")
-	class UQuestDataAsset* StartingQuestAsset;
+	TArray<UQuestDataAsset*> ActiveQuestAssets;
 
 protected : 
 	/** Called for movement input */

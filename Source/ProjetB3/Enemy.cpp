@@ -5,7 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "ProjetB3Character.h" 
-#include "QuestComponent.h" 
+#include "QuestSubsystem.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -30,6 +30,17 @@ AEnemy::AEnemy()
     OverlapBox->OnComponentBeginOverlap.AddDynamic(this, &AEnemy::OnOverlapBegin);
 }
 
+void AEnemy::BeginPlay() 
+{
+    Super::BeginPlay();
+    UQuestSubsystem* QuestSubsystem = GetWorld()->GetSubsystem<UQuestSubsystem>();
+    this->OnDeath.AddDynamic(QuestSubsystem, &UQuestSubsystem::EnemyDied);
+}
+
+
+
+
+
 
 void AEnemy::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
     AActor* OtherActor,
@@ -43,21 +54,11 @@ void AEnemy::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
 
     // 1. Vérifier si c'est bien le joueur
     AProjetB3Character* PlayerCharacter = Cast<AProjetB3Character>(OtherActor);
+
     if (PlayerCharacter)
     {
-        // 2. Récupérer le composant de quête du joueur
-        UQuestComponent* QuestComp = PlayerCharacter->FindComponentByClass<UQuestComponent>();
-
-        if (QuestComp)
-        {
-            // 3. Envoyer le signal de progression !
-            QuestComp->UpdateObjectiveProgress(ObjectiveTagToUpdate, 1);
-
-            // 4. On s'assure que ça n'arrive qu'une fois
-            bHasBeenTriggered = true;
-
-            // 5. Simuler la "mort" : l'acteur disparaît
-            Destroy();
-        }
+        OnDeath.Broadcast();
+        bHasBeenTriggered = true;
+        Destroy();
     }
 }

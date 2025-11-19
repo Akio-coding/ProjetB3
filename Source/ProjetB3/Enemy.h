@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Enemy.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnDeath);
+
 UCLASS()
 class PROJETB3_API AEnemy : public AActor
 {
@@ -15,13 +17,19 @@ public:
 	// Sets default values for this actor's properties
 	AEnemy();
 
+    UPROPERTY(BlueprintAssignable, Category = "Quest")
+    FOnDeath OnDeath;
+
+
 protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UBoxComponent* OverlapBox;
-
     
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
     class UStaticMeshComponent* MeshComponent;
+
+    
+
 
     UFUNCTION()
     void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp,
@@ -38,4 +46,5 @@ protected:
     // Pour s'assurer qu'on ne le "tue" qu'une seule fois
     bool bHasBeenTriggered;
 
+    virtual void BeginPlay();
 };

@@ -78,21 +78,13 @@ void AProjetB3Character::BeginPlay()
 	}
 	if (QuestComponent)
 	{
-		QuestComponent->AddQuestFromAsset(StartingQuestAsset);
-		/*StartingQuest.bIsComplete = false;
-		QuestComponent->AddQuest(StartingQuest);*/
+		// Parcourir le tableau de quête
+		for (UQuestDataAsset* QuestAsset : ActiveQuestAssets)
+		{
+			// Et y ajouter chaque quête
+			QuestComponent->AddQuestFromAsset(QuestAsset);
+		}
 	}
-
-	/*
-	* ancienne méthode
-	FQuestObjective Objective;
-	Objective.ObjectiveTag = FName(TEXT("TuerEnnemi"));
-	Objective.TargetCount = 3;
-	Objective.CurrentCount = 0; 
-
-	FActiveQuest NewQuest;
-	NewQuest.Title = FText::FromString(TEXT("Eliminations"));
-	NewQuest.Objectives.Add(Objective); */
 }
 
 //////////////////////////////////////////////////////////////////////////

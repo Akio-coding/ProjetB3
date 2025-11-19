@@ -89,7 +89,7 @@ void UQuestComponent::UpdateObjectiveProgress(FName ObjectiveTag, int32 AmountTo
             Objective.CurrentCount = FMath::Min(Objective.CurrentCount + AmountToAdd, Objective.TargetCount);
             bNeedsBroadcast = true;
 
-            // L'objectif est-il complet ? Si oui, vérifions la quête.
+            // L'objectif est-il complet ? Si oui, on vérifie la quête.
             if (Objective.CurrentCount == Objective.TargetCount)
             {
                 bool bAllObjectivesDone = true;
@@ -107,24 +107,13 @@ void UQuestComponent::UpdateObjectiveProgress(FName ObjectiveTag, int32 AmountTo
                 if (bAllObjectivesDone)
                 {
                     Quest.bIsComplete = true; // Marque la quête
-                    GrantQuestRewards(Quest); // Donne les récompenses !
-
-                    // A ce stade, vous pourriez aussi supprimer la quête
-                    // de la liste, ou la déplacer vers un TArray "CompletedQuests"
+                    GrantQuestRewards(Quest); // Donne les récompenses ! 
                 }
             }
-
-            ///envoyer un signal à l'objectif qui vient d'être mis à jour !
-            // OnQuestUpdated.Broadcast(Objective);
-
-            // // On peut s'arrêter ici car l'objectif est mis à jour
-            // return;
-            
         }
     }
-
     if (bNeedsBroadcast)
     {
-        OnQuestUpdated.Broadcast(); // Notre nouveau signal simple !
+        OnQuestUpdated.Broadcast(); // Envoi du signal 
     }
 }
