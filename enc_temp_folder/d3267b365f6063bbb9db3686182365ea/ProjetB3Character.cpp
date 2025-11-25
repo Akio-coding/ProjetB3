@@ -63,33 +63,22 @@ void AProjetB3Character::BeginPlay()
 	// Call the base class  
 	Super::BeginPlay();
 
-
-	// 1. Préparer le tirage au sort
-	if (AllQuestsPool.Num() > 0)
+	if (QuestWidgetClass) 
 	{
-		// On copie le pool pour ne pas détruire l'original
-		TArray<UQuestDataAsset*> TempPool = AllQuestsPool;
-
-		// ALGORITHME DE MÉLANGE (Fisher-Yates simple)
-		int32 LastIndex = TempPool.Num() - 1;
-		for (int32 i = 0; i <= LastIndex; ++i)
+		
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC)
 		{
-			int32 Index = FMath::RandRange(i, LastIndex);
-			if (i != Index)
+			QuestWidgetInstance = CreateWidget<UUserWidget>(PC, QuestWidgetClass);
+			if (QuestWidgetInstance)
 			{
-				TempPool.Swap(i, Index);
+				QuestWidgetInstance->AddToViewport();
 			}
-		}
-
-		// On prend les 4 premiers (ou moins si on en a pas assez)
-		int32 NumToSelect = FMath::Min(4, TempPool.Num());
-		for (int32 i = 0; i < NumToSelect; i++)
-		{
-			DraftedQuests.Add(TempPool[i]);
 		}
 	}
 
-	// 1. Création du Widget de Journal (celui qui affiche les quête active)
+
+	// 1. Création du Widget de Journal (celui qui affiche la quête active)
 	// On le garde, mais il sera vide au début.
 	if (QuestWidgetClass)
 	{
@@ -102,7 +91,7 @@ void AProjetB3Character::BeginPlay()
 				QuestWidgetInstance->AddToViewport();
 			}
 
-			// Afficher le menu de SÉLECTION ---
+			// --- NOUVEAU : Afficher le menu de SÉLECTION ---
 			if (QuestSelectionWidgetClass)
 			{
 				// Créer le widget de sélection
@@ -123,6 +112,16 @@ void AProjetB3Character::BeginPlay()
 			}
 		}
 	}
+
+	//if (QuestComponent)
+	//{
+	//	// Parcourir le tableau de quête
+	//	for (UQuestDataAsset* QuestAsset : ActiveQuestAssets)
+	//	{
+	//		// Et y ajouter chaque quête
+	//		QuestComponent->AddQuestFromAsset(QuestAsset);
+	//	}
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////

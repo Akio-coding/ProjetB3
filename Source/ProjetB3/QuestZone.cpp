@@ -79,17 +79,7 @@ void AQuestZone::Tick(float DeltaTime)
             bHasBeenCompleted = true; // Marquer comme terminé
 
             ZoneCaptured.Broadcast();
-            // enlever et mettre dans le subsystem
-            // Trouver le QuestComponent et mettre à jour la quête
-            //UQuestComponent* QuestComp = PlayerRef->FindComponentByClass<UQuestComponent>();
-            //if (QuestComp)
-            //{
-            //    // On envoie le Tag ! Le "Count" est 1 (pour "1 fois 5 secondes")
-            //    QuestComp->UpdateObjectiveProgress(ObjectiveTag, 1);
-            //}
-            //jusque la
-            // 
-            // 
+            
             // Désactivation du tick pour économiser les performances
             SetActorTickEnabled(false);
             Destroy(); 

@@ -69,15 +69,8 @@ protected:
 	class UUserWidget* QuestWidgetInstance;
 
 	// Quête rattachée au personnage
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Quest")
-	TArray<UQuestDataAsset*> ActiveQuestAssets;*/
-
-	UPROPERTY(EditDefaultsOnly, Category = "Quest")
-	TArray<UQuestDataAsset*> AllQuestsPool;
-
-	// La liste temporaire des 4 quêtes tirées au sort (Visible pour l'UI)
-	UPROPERTY(VisibleInstanceOnly, BlueprintReadOnly, Category = "Quest")
-	TArray<UQuestDataAsset*> DraftedQuests;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Quest")
+	TArray<UQuestDataAsset*> ActiveQuestAssets;
 
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
 	TSubclassOf<class UUserWidget> QuestSelectionWidgetClass;

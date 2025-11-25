@@ -6,6 +6,19 @@
 #include "QuestReward.h"
 #include "QuestData.generated.h"
 
+
+
+
+// 1. Définition de l'Enum Difficulty
+UENUM(BlueprintType)
+enum class EQuestDifficulty : uint8
+{
+    Easy          UMETA(DisplayName = "Easy"),
+    Medium        UMETA(DisplayName = "Medium"),
+    Hard          UMETA(DisplayName = "Hard"),
+};
+
+
 // Objectif de la quête (ex: "Tuer 3 ennemis")
 USTRUCT(BlueprintType)
 struct FQuestObjective
@@ -39,6 +52,7 @@ public:
     }
 };
 
+
 // La structure de la quête principale
 USTRUCT(BlueprintType)
 struct FActiveQuest
@@ -46,9 +60,15 @@ struct FActiveQuest
     GENERATED_BODY()
 
 public:
+
+
     // Titre de la quête (ex: "Nettoyer la zone")
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
     FText Title;
+    
+    // Difficulté de la quête (ex: "Easy")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
+    EQuestDifficulty Difficulty;
 
     // Une quête peut avoir plusieurs objectifs
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Quest")
@@ -67,5 +87,7 @@ public:
     FActiveQuest()
     {
         bIsComplete = false;
+        Difficulty = EQuestDifficulty::Easy;
     }
 };
+
