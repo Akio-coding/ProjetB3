@@ -76,15 +76,52 @@ void AProjetB3Character::BeginPlay()
 			}
 		}
 	}
-	if (QuestComponent)
+
+
+	// 1. Création du Widget de Journal (celui qui affiche la quête active)
+	// On le garde, mais il sera vide au début.
+	if (QuestWidgetClass)
 	{
-		// Parcourir le tableau de quête
-		for (UQuestDataAsset* QuestAsset : ActiveQuestAssets)
+		APlayerController* PC = Cast<APlayerController>(GetController());
+		if (PC)
 		{
-			// Et y ajouter chaque quête
-			QuestComponent->AddQuestFromAsset(QuestAsset);
+			QuestWidgetInstance = CreateWidget<UUserWidget>(PC, QuestWidgetClass);
+			if (QuestWidgetInstance)
+			{
+				QuestWidgetInstance->AddToViewport();
+			}
+
+			// --- NOUVEAU : Afficher le menu de SÉLECTION ---
+			if (QuestSelectionWidgetClass)
+			{
+				// Créer le widget de sélection
+				UUserWidget* SelectionWidget = CreateWidget<UUserWidget>(PC, QuestSelectionWidgetClass);
+				if (SelectionWidget)
+				{
+					SelectionWidget->AddToViewport();
+
+					// --- GESTION DE la SOURIS ---
+					// On affiche la souris et on bloque les mouvements du jeu pour choisir
+					PC->bShowMouseCursor = true;
+
+					// Optionnel : Mettre le mode en "UI Only" pour empêcher le perso de bouger
+					FInputModeUIOnly InputMode;
+					InputMode.SetWidgetToFocus(SelectionWidget->TakeWidget());
+					PC->SetInputMode(InputMode);
+				}
+			}
 		}
 	}
+
+	//if (QuestComponent)
+	//{
+	//	// Parcourir le tableau de quête
+	//	for (UQuestDataAsset* QuestAsset : ActiveQuestAssets)
+	//	{
+	//		// Et y ajouter chaque quête
+	//		QuestComponent->AddQuestFromAsset(QuestAsset);
+	//	}
+	//}
 }
 
 //////////////////////////////////////////////////////////////////////////

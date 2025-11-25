@@ -25,6 +25,10 @@ public:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")
     TArray<FActiveQuest> ActiveQuests;
 
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")
+    TArray<FActiveQuest> CompletedQuests;
+
+
     // Le "signal" de mise à jour pour l'UI
     UPROPERTY(BlueprintAssignable, Category = "Quest")
     FOnQuestUpdated OnQuestUpdated;

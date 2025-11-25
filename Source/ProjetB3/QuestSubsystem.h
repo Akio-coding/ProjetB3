@@ -19,5 +19,8 @@ public :
 
 	UFUNCTION()
 	void EnemyDied();
+
+	UFUNCTION()
+	void ZoneCaptured();
 };
 

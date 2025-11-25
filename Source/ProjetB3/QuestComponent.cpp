@@ -70,50 +70,100 @@ void UQuestComponent::UpdateObjectiveProgress(FName ObjectiveTag, int32 AmountTo
 
     bool bNeedsBroadcast = false;
 
-    // Boucle sur toutes nos quêtes actives
-    for (FActiveQuest& Quest : ActiveQuests)
+    // CHANGEMENT : On boucle à l'envers (int32 i = Num() - 1; i >= 0; --i)
+    // Cela nous permet de supprimer des éléments (RemoveAt) sans casser la boucle.
+    for (int32 i = ActiveQuests.Num() - 1; i >= 0; --i)
     {
-        // Si la quête est déjà complétée, on passe à la suivante
+        // On récupère une référence à la quête via son index
+        FActiveQuest& Quest = ActiveQuests[i];
+
         if (Quest.bIsComplete) continue;
 
-        // Boucle sur tous les objectifs de cette quête
         for (FQuestObjective& Objective : Quest.Objectives)
         {
-            // On a trouvé le bon objectif !
             if (Objective.ObjectiveTag != ObjectiveTag) continue;
-            
-            //On vérifie s'il n'est pas déjà complété
-            if (Objective.CurrentCount > Objective.TargetCount) continue;
-            
+            if (Objective.CurrentCount >= Objective.TargetCount) continue; // Correction: >= au lieu de >
+
             // Ajoute la progression
             Objective.CurrentCount = FMath::Min(Objective.CurrentCount + AmountToAdd, Objective.TargetCount);
             bNeedsBroadcast = true;
 
-            // L'objectif est-il complet ? Si oui, on vérifie la quête.
             if (Objective.CurrentCount == Objective.TargetCount)
             {
                 bool bAllObjectivesDone = true;
-                // On vérifie TOUS les autres objectifs de cette quête
                 for (const FQuestObjective& Obj : Quest.Objectives)
                 {
                     if (Obj.CurrentCount < Obj.TargetCount)
                     {
-                        bAllObjectivesDone = false; // Un objectif n'est pas fini
+                        bAllObjectivesDone = false;
                         break;
                     }
                 }
 
-                // Si TOUS les objectifs sont finis
                 if (bAllObjectivesDone)
                 {
-                    Quest.bIsComplete = true; // Marque la quête
-                    GrantQuestRewards(Quest); // Donne les récompenses ! 
+                    Quest.bIsComplete = true;
+                    GrantQuestRewards(Quest);
+
+                    // --- C'EST ICI QUE LA MAGIE OPÈRE ---
+                    // 1. On archive la quête dans la liste des terminées
+                    CompletedQuests.Add(Quest);
+
+                    // 2. On la supprime de la liste active
+                    // L'UI, qui lit "ActiveQuests", ne la verra plus !
+                    ActiveQuests.RemoveAt(i);
                 }
             }
         }
     }
+
     if (bNeedsBroadcast)
     {
         OnQuestUpdated.Broadcast(); // Envoi du signal 
     }
+
+
+
+    //// Boucle sur toutes nos quêtes actives
+    //for (FActiveQuest& Quest : ActiveQuests)
+    //{
+    //    // Si la quête est déjà complétée, on passe à la suivante
+    //    if (Quest.bIsComplete) continue;
+
+    //    // Boucle sur tous les objectifs de cette quête
+    //    for (FQuestObjective& Objective : Quest.Objectives)
+    //    {
+    //        // On a trouvé le bon objectif !
+    //        if (Objective.ObjectiveTag != ObjectiveTag) continue;
+    //        
+    //        //On vérifie s'il n'est pas déjà complété
+    //        if (Objective.CurrentCount > Objective.TargetCount) continue;
+    //        
+    //        // Ajoute la progression
+    //        Objective.CurrentCount = FMath::Min(Objective.CurrentCount + AmountToAdd, Objective.TargetCount);
+    //        bNeedsBroadcast = true;
+
+    //        // L'objectif est-il complet ? Si oui, on vérifie la quête.
+    //        if (Objective.CurrentCount == Objective.TargetCount)
+    //        {
+    //            bool bAllObjectivesDone = true;
+    //            // On vérifie TOUS les autres objectifs de cette quête
+    //            for (const FQuestObjective& Obj : Quest.Objectives)
+    //            {
+    //                if (Obj.CurrentCount < Obj.TargetCount)
+    //                {
+    //                    bAllObjectivesDone = false; // Un objectif n'est pas fini
+    //                    break;
+    //                }
+    //            }
+
+    //            // Si TOUS les objectifs sont finis
+    //            if (bAllObjectivesDone)
+    //            {
+    //                Quest.bIsComplete = true; // Marque la quête
+    //                GrantQuestRewards(Quest); // Donne les récompenses ! 
+    //            }
+    //        }
+    //    }
+    //}
 }

@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "QuestZone.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FZoneCapture);
+
 UCLASS()
 class PROJETB3_API AQuestZone : public AActor
 {
@@ -42,6 +44,9 @@ protected:
     UPROPERTY()
     class AProjetB3Character* PlayerRef;
 
+    UPROPERTY(BlueprintAssignable, Category = "Quest")
+    FZoneCapture ZoneCaptured;
+
     // Fonctions d'Overlap
     UFUNCTION()
     void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, 
@@ -59,4 +64,5 @@ protected:
 
     virtual void Tick(float DeltaTime) override;
 
+    virtual void BeginPlay();
 };

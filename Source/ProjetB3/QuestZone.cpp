@@ -5,6 +5,7 @@
 #include "Components/BoxComponent.h"
 #include "ProjetB3Character.h" 
 #include "QuestComponent.h" 
+#include "QuestSubsystem.h"
 
 // Sets default values
 AQuestZone::AQuestZone()
@@ -19,6 +20,13 @@ AQuestZone::AQuestZone()
     // Lier les fonctions aux événements d'overlap
     OverlapBox->OnComponentBeginOverlap.AddDynamic(this, &AQuestZone::OnOverlapBegin);
     OverlapBox->OnComponentEndOverlap.AddDynamic(this, &AQuestZone::OnOverlapEnd);
+}
+
+void AQuestZone::BeginPlay()
+{
+    Super::BeginPlay();
+    UQuestSubsystem* QuestSubsystem = GetWorld()->GetSubsystem<UQuestSubsystem>();
+    this->ZoneCaptured.AddDynamic(QuestSubsystem, &UQuestSubsystem::ZoneCaptured);
 }
 
 void AQuestZone::OnOverlapBegin(
@@ -70,15 +78,18 @@ void AQuestZone::Tick(float DeltaTime)
         {
             bHasBeenCompleted = true; // Marquer comme terminé
 
+            ZoneCaptured.Broadcast();
             // enlever et mettre dans le subsystem
             // Trouver le QuestComponent et mettre à jour la quête
-            UQuestComponent* QuestComp = PlayerRef->FindComponentByClass<UQuestComponent>();
-            if (QuestComp)
-            {
-                // On envoie le Tag ! Le "Count" est 1 (pour "1 fois 5 secondes")
-                QuestComp->UpdateObjectiveProgress(ObjectiveTag, 1);
-            }
-
+            //UQuestComponent* QuestComp = PlayerRef->FindComponentByClass<UQuestComponent>();
+            //if (QuestComp)
+            //{
+            //    // On envoie le Tag ! Le "Count" est 1 (pour "1 fois 5 secondes")
+            //    QuestComp->UpdateObjectiveProgress(ObjectiveTag, 1);
+            //}
+            //jusque la
+            // 
+            // 
             // Désactivation du tick pour économiser les performances
             SetActorTickEnabled(false);
             Destroy(); 

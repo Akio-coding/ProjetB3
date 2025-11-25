@@ -69,8 +69,11 @@ protected:
 	class UUserWidget* QuestWidgetInstance;
 
 	// Quête rattachée au personnage
-	UPROPERTY(EditDefaultsOnly, Category = "Quest")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Quest")
 	TArray<UQuestDataAsset*> ActiveQuestAssets;
+
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UUserWidget> QuestSelectionWidgetClass;
 
 protected : 
 	/** Called for movement input */

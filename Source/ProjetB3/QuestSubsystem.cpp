@@ -29,3 +29,19 @@ void UQuestSubsystem::EnemyDied()
         }
     }
 }
+
+void UQuestSubsystem::ZoneCaptured() 
+{
+    //Trouver le QuestComponent et mettre à jour la quête
+    ACharacter* PlayerCharacter = UGameplayStatics::GetPlayerCharacter(this, 0);
+    if (PlayerCharacter) 
+    {
+        UQuestComponent* QuestComp = PlayerCharacter->FindComponentByClass<UQuestComponent>();
+        if (QuestComp)
+        {
+            FName ObjectiveTag = FName("StayZone");
+            // On envoie le Tag ! Le "Count" est 1 (pour "1 fois 5 secondes")
+            QuestComp->UpdateObjectiveProgress(ObjectiveTag, 1);
+        }
+    }
+}
