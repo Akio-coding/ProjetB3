@@ -55,10 +55,6 @@ public:
 protected:
 	// --- Section Quête ---
 
-	// Le composant de quête
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")
-	class UQuestComponent* QuestComponent;
-
 	// La *classe* de Widget Blueprint que nous voulons créer
 	// Nous la définirons dans l'éditeur
 	UPROPERTY(EditDefaultsOnly, Category = "UI")
@@ -67,10 +63,6 @@ protected:
 	// L'instance de widget que nous allons créer
 	UPROPERTY(VisibleInstanceOnly, Category = "UI")
 	class UUserWidget* QuestWidgetInstance;
-
-	// Quête rattachée au personnage
-	/*UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Quest")
-	TArray<UQuestDataAsset*> ActiveQuestAssets;*/
 
 	UPROPERTY(EditDefaultsOnly, Category = "Quest")
 	TArray<UQuestDataAsset*> AllQuestsPool;

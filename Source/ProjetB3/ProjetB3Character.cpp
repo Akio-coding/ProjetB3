@@ -10,7 +10,6 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "QuestComponent.h" 
 #include "Blueprint/UserWidget.h" 
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -54,8 +53,7 @@ AProjetB3Character::AProjetB3Character()
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
-
-	QuestComponent = CreateDefaultSubobject<UQuestComponent>(TEXT("QuestComponent"));
+	 
 }
 
 void AProjetB3Character::BeginPlay()
@@ -70,7 +68,7 @@ void AProjetB3Character::BeginPlay()
 		// On copie le pool pour ne pas détruire l'original
 		TArray<UQuestDataAsset*> TempPool = AllQuestsPool;
 
-		// ALGORITHME DE MÉLANGE (Fisher-Yates simple)
+		// ALGORITHME DE MÉLANGE (Fisher-Yates)
 		int32 LastIndex = TempPool.Num() - 1;
 		for (int32 i = 0; i <= LastIndex; ++i)
 		{

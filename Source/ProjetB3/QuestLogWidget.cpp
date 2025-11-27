@@ -4,7 +4,7 @@
 #include "QuestLogWidget.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "QuestComponent.h" // N'oubliez pas d'inclure le composant
+#include "QuestSubsystem.h"
 #include "GameFramework/Pawn.h" // Pour trouver notre joueur
 
 void UQuestLogWidget::NativeConstruct()
@@ -15,13 +15,13 @@ void UQuestLogWidget::NativeConstruct()
     APawn* PlayerPawn = UGameplayStatics::GetPlayerPawn(this, 0);
     if (PlayerPawn)
     {
-        // Trouvons le composant de quête sur ce joueur
-        QuestComponent = PlayerPawn->FindComponentByClass<UQuestComponent>();
-        if (QuestComponent)
+        // On récupère le Subsystem directement depuis le monde
+        QuestSubsystem = GetWorld()->GetSubsystem<UQuestSubsystem>();
+        if (QuestSubsystem)
         {
             // C'est l'étape cruciale : nous "abonnons" notre widget
             // au signal "OnQuestUpdated" du composant.
-            QuestComponent->OnQuestUpdated.AddDynamic(this, &UQuestLogWidget::HandleQuestUpdated);
+            QuestSubsystem->OnQuestUpdated.AddDynamic(this, &UQuestLogWidget::HandleQuestUpdated);
 
             // Appelons-le une fois au début pour afficher les quêtes actuelles
             HandleQuestUpdated();

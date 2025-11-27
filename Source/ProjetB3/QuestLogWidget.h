@@ -26,8 +26,7 @@ protected:
     UFUNCTION(BlueprintImplementableEvent, Category = "Quest")
     void OnQuestDataUpdated();
 
-    // Pas faire comme ça
-    // Une référence pratique vers notre composant de quêtes
-    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest")
-    class UQuestComponent* QuestComponent;
+
+    UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Quest") 
+    class UQuestSubsystem* QuestSubsystem;
 };

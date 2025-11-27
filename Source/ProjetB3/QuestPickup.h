@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "QuestPickup.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FPickedUp);
+
 UCLASS()
 class PROJETB3_API AQuestPickup : public AActor
 {
@@ -16,6 +18,9 @@ public:
 	AQuestPickup();
 
 protected:
+    UPROPERTY(BlueprintAssignable, Category = "Quest")
+    FPickedUp PickedUp;
+
     // 1. La sphère de détection (invisible) qui déclenche l'événement
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
     class USphereComponent* OverlapSphere;
@@ -36,4 +41,8 @@ protected:
         int32 OtherBodyIndex,
         bool bFromSweep,
         const FHitResult& SweepResult);
+
+    virtual void BeginPlay();
+
+    bool bHasBeenTriggered;
 };

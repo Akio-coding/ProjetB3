@@ -3,8 +3,7 @@
 
 #include "QuestZone.h"
 #include "Components/BoxComponent.h"
-#include "ProjetB3Character.h" 
-#include "QuestComponent.h" 
+#include "ProjetB3Character.h"  
 #include "QuestSubsystem.h"
 
 // Sets default values

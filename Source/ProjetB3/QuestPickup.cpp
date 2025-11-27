@@ -4,8 +4,8 @@
 #include "QuestPickup.h"
 #include "Components/SphereComponent.h"      
 #include "Components/StaticMeshComponent.h"  
-#include "ProjetB3Character.h"               
-#include "QuestComponent.h"                  
+#include "ProjetB3Character.h"      
+#include "QuestSubsystem.h"
 
 // Sets default values
 AQuestPickup::AQuestPickup()
@@ -33,6 +33,13 @@ AQuestPickup::AQuestPickup()
 
 }
 
+void AQuestPickup::BeginPlay()
+{ 
+    Super::BeginPlay();
+    UQuestSubsystem* QuestSubsystem = GetWorld()->GetSubsystem<UQuestSubsystem>();
+    this->PickedUp.AddDynamic(QuestSubsystem, &UQuestSubsystem::PickedUp);
+}
+
 void AQuestPickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
     AActor* OtherActor,
     UPrimitiveComponent* OtherComp,
@@ -42,19 +49,16 @@ void AQuestPickup::OnOverlapBegin(UPrimitiveComponent* OverlappedComp,
 {
     // A. Est-ce que c'est le joueur qui a touché la sphère ?
     AProjetB3Character* Player = Cast<AProjetB3Character>(OtherActor);
-
     if (Player)
     {
-        // B. Est-ce que le joueur a un composant de quête ?
-        UQuestComponent* QuestComp = Player->FindComponentByClass<UQuestComponent>();
+        AProjetB3Character* PlayerCharacter = Cast<AProjetB3Character>(OtherActor);
 
-        if (QuestComp)
+        if (PlayerCharacter)
         {
-            // C. Mettre à jour la quête ! (Ajoute 1 au compteur)
-            QuestComp->UpdateObjectiveProgress(ObjectiveTag, 1);
-
-            // D. Détruire l'objet (puisqu'il est ramassé)
+            PickedUp.Broadcast();
+            bHasBeenTriggered = true;
             Destroy();
         }
+
     }
 }
